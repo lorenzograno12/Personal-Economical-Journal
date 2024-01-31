@@ -10,34 +10,56 @@ print(mydb)
 
 mycursor = mydb.cursor()
 
-from tkinter import *
+import tkinter as tk
+from tkinter import messagebox
 
-root = Tk()
-var = IntVar()
-R1 = Radiobutton(root, text="Expence", variable=var, value=1)
-R1.pack( anchor = W )
-R2 = Radiobutton(root, text="Income", variable=var, value=2)
-R2.pack( anchor = W )
-label = Label(root)
-top = Tk()
-L1 = Label(top, text="Movement Description")
-L1.pack( side = LEFT)
-E1 = Entry(top, bd =5)
-E1.pack(side = RIGHT)
-label.pack()
-root.mainloop()
+window = tk.Tk()
+window.title("Personal Ecnonomical bullet")
+window.resizable(True, True)
+window.configure(background="Black")
+window.state('zoomed')
+window.columnconfigure(20, weight=1)
+window.rowconfigure(20, weight=1)
 
-if R1==True:
-    insert_stmt = (
-    "INSERT INTO expence(FIRST_NAME, LAST_NAME, AGE, SEX, INCOME)"
-    "VALUES (%s, %s, %s, %s, %s)"
-    )
-    data = ('Ramya', 'Ramapriya', 25, 'F', 5000)
+
+Expence_select = tk.Radiobutton(window, text="Expense", value=1)
+Expence_select.grid(column=21, row=0, sticky=tk.W, padx=5, pady=5)
+Income_select = tk.Radiobutton(window, text="Income ", value=2)
+Income_select.grid(column=21, row=1, sticky=tk.W, padx=5, pady=5)
+Movement_description_label = tk.Label(window, text="Movement Description  ")
+Movement_description_label.grid(column=0, row=0, sticky=tk.W, padx=5, pady=5)
+Movement_description = tk.Entry(window, bd =5)
+Movement_description.grid(column=0, row=1, sticky=tk.W, padx=5, pady=5)
+Movement_amount_label = tk.Label(window, text="Movement Amount  ")
+Movement_amount_label.grid(column=12, row=0, sticky=tk.W, padx=7, pady=5)
+Movement_amount = tk.Entry(window, bd =5)
+Movement_amount.grid(column=12, row=1, sticky=tk.W, padx=5, pady=5)
+Movement_quantity_label = tk.Label(window, text="Quantity  ")
+Movement_quantity_label.grid(column=15, row=0, sticky=tk.W, padx=7, pady=5)
+Movement_quantity = tk.Entry(window, bd =5)
+Movement_quantity.grid(column=15, row=1, sticky=tk.W, padx=5, pady=5)
+Movement_date_label = tk.Label(window, text="Date  ")
+Movement_date_label.grid(column=18, row=0, sticky=tk.W, padx=7, pady=5)
+Movement_date = tk.Entry(window, bd =5)
+Movement_date.grid(column=18, row=1, sticky=tk.W, padx=5, pady=5)
+def helloCallBack():
+   msg=messagebox.showinfo("","Datas correctly inserted")
+B_insert = tk.Button(window, text ="Send datas", command = helloCallBack)
+B_insert.grid(column=10, row=21, sticky=tk.W, padx=5, pady=5)
+
+window.mainloop()
+
+mycursor = mydb.cursor()
+
+if Expence_select==True:
+    sql = "INSERT INTO expence(Desciption, Date, Amount, Quantity) VALUES (Movement_description, Movement_date, Movement_amount, Movement_quantity)"
+    val = (Movement_description, Movement_date, type(int(Movement_amount)), type(int(Movement_quantity)))
+    mycursor.execute(sql, val)
     print("Expence inserted correctly")
 else:
-    insert_stmt = (
-    "INSERT INTO income(FIRST_NAME, LAST_NAME, AGE, SEX, INCOME)"
-    "VALUES (%s, %s, %s, %s, %s)"
-    )
-    data = ('Ramya', 'Ramapriya', 25, 'F', 5000)
+    sql = "INSERT INTO expence(Desciption, Date, Amount, Quantity) VALUES (Movement_description, Movement_date, Movement_amount, Movement_quantity)"
+    val = (Movement_description, Movement_date, type(int(Movement_amount)), type(int(Movement_quantity)))
+    mycursor.execute(sql, val)
     print("income inserted correctly")
+
+mydb.commit()
